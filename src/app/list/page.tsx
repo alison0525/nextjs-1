@@ -1,3 +1,11 @@
+"use client"
 export default function Home() {
-    return <div>여기는 /posts 페이지입니다.</div>
+    return (
+        <>
+            <div>안녕하세요</div>
+            <button onClick={() => {
+                alert("hihi");
+            }}>버튼</button>
+        </>
+    );
 }
