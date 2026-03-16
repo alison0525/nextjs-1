@@ -23,12 +23,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="ko">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <h1>헤더</h1>
+        <header>
+          <nav className="flex gap-4">
+            <a href="/">메인</a>
+            <a href="/list">목록</a>
+          </nav>
+        </header>
         {children}
+        <footer>푸터</footer>
       </body>
     </html>
   );
