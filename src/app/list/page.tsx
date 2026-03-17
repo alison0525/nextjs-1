@@ -6,12 +6,18 @@ export default function Home() {
     const [posts, setPosts] = useState<{ id: number, title: string }[]>([]);
 
     useEffect(() => {
-        fetch("http://localhost:8080/api/v1/posts")
-            .then((response) => response.json())
-            .then((data) => {
+        async function fetchPosts() {
+            try {
+                const res = await fetch("http://localhost:8080/api/v1/posts");
+                const data = await res.json();
                 console.log(data);
                 setPosts(data);
-            })
+            } catch (error) {
+                console.log("게시글 불러오기 실패:", error);
+            }
+        }
+
+        fetchPosts();
     }, []);
 
     return (
