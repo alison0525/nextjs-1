@@ -14,22 +14,27 @@ export default function Home() {
     }, []);
 
     return (
-        <div className="flex flex-col gap-9">
-            {posts.length === 0 && <div>Loading...</div>}
-            <h1>글 목록</h1>
-            {posts.length > 0 && (
-                <ul>
-                    {
-                        posts.map((post) => (
-                            <li key={post.id} className="p-2">
-                                <Link href={`/posts/${post.id}`}>
-                                    - {post.id}. {post.title}
-                                </Link>
-                            </li>
-                        ))
-                    }
-                </ul>
-            )}
+        <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-9">
+                {posts.length === 0 && <div>Loading...</div>}
+                <h1>글 목록</h1>
+                {posts.length > 0 && (
+                    <ul>
+                        {
+                            posts.map((post) => (
+                                <li key={post.id} className="p-2">
+                                    <Link href={`/posts/${post.id}`}>
+                                        - {post.id}. {post.title}
+                                    </Link>
+                                </li>
+                            ))
+                        }
+                    </ul>
+                )}
+            </div>
+            <div>
+                <Link href="/posts/write">새 글 작성</Link>
+            </div>
         </div>
     );
 }
