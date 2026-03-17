@@ -1,4 +1,5 @@
 "use client"
+import { fetchApi } from "@/lib/client";
 import { PostDto } from "@/type/post";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -7,18 +8,9 @@ export default function Home() {
 
     const [posts, setPosts] = useState<PostDto[]>([]);
 
-    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
     useEffect(() => {
-        fetch(`${baseUrl}/api/v1/posts`)
-            .then((res) => res.json())
-            .then((data) => {
-                console.log(data);
-                setPosts(data);
-            })
-            .catch((error) => {
-                console.log("게시글 불러오기 실패:", error);
-            })
+        fetchApi("/api/v1/posts").then(setPosts);
     }, []);
 
     return (
