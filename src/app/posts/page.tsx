@@ -7,8 +7,10 @@ export default function Home() {
 
     const [posts, setPosts] = useState<PostDto[]>([]);
 
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
     useEffect(() => {
-        fetch("http://localhost:8080/api/v1/posts")
+        fetch(`${baseUrl}/api/v1/posts`)
             .then((res) => res.json())
             .then((data) => {
                 console.log(data);
