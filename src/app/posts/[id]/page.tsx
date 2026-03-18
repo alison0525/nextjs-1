@@ -7,15 +7,15 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-    const { id } = useParams();
+    const { id: postId } = useParams();
     const router = useRouter();
 
     const [post, setPost] = useState<PostDto | null>(null);
     const [postComments, setPostComments] = useState<PostCommentDto[] | null>(null);
 
     useEffect(() => {
-        fetchApi(`/api/v1/posts/${id}`).then(setPost);
-        fetchApi(`/api/v1/posts/${id}/comments`).then(setPostComments);
+        fetchApi(`/api/v1/posts/${postId}`).then(setPost);
+        fetchApi(`/api/v1/posts/${postId}/comments`).then(setPostComments);
     }, []);
 
     const deletePost = (id: number) => {
@@ -27,6 +27,15 @@ export default function Home() {
         });
     }
 
+    const deletePostComment = (commentId: number) => {
+        fetchApi(`/api/v1/posts/${postId}/comments/${commentId}`, {
+            method: "DELETE",
+        }).then((data) => {
+            alert(data.msg);
+            setPostComments(postComments?.filter((comment) => comment.id !== commentId) || null);
+        });
+    }
+
     if (post === null) {
         return <div>Loading...</div>;
     }
@@ -34,6 +43,7 @@ export default function Home() {
     return (
         <>
             <h1 className="p-2">글 상세 보기</h1>
+
             <div>
                 <div>번호 : {post.id}</div>
                 <div>제목 : {post.title}</div>
@@ -53,22 +63,32 @@ export default function Home() {
                     삭제
                 </button>
             </div>
-            <div>
-                <h2 className="p-2">댓글 목록</h2>
-                {postComments === null && <div>Loading...</div>}
-                {postComments !== null && postComments.length === 0 && (
-                    <div>댓글이 없습니다.</div>
-                )}
-                {postComments !== null && postComments.length > 0 && (
-                    <ul>
-                        {postComments.map((comment) => (
-                            <li key={comment.id}>
-                                {comment.id} : {comment.content}
-                            </li>
-                        ))}
-                    </ul>
-                )}
-            </div>
+
+            <h2 className="p-2">댓글 목록</h2>
+            {postComments === null && <div>Loading...</div>}
+            {postComments !== null && postComments.length === 0 && (
+                <div>댓글이 없습니다.</div>
+            )}
+
+            {postComments !== null && postComments.length > 0 && (
+                <ul className="flex flex-col gap-2">
+                    {postComments.map((postComment) => (
+                        <li key={postComment.id} className="flex gap-2 items-center">
+                            <span>{postComment.id} : </span>
+                            <span>{postComment.content}</span>
+                            <button className="border-2 p-2 rounded">수정</button>
+                            <button
+                                className="border-2 p-2 rounded"
+                                onClick={() => {
+                                    deletePostComment(postComment.id);
+                                }}
+                            >
+                                삭제
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+            )}
         </>
     );
 }
